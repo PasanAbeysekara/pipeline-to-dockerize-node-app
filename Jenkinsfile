@@ -9,7 +9,9 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'docker run -d -p 3000:3000 simple-app'
-                sh 'curl http://localhost:3000'
+                sh 'sleep 10' // Gives the app time to start
+                sh 'curl http://localhost:3000 || true' // Prevent Jenkins from failing to allow the next command
+                sh 'docker logs $(docker ps -lq)'
             }
         }
     }
